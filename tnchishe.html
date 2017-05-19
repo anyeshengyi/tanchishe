@@ -61,8 +61,22 @@
 		font-weight: 600;
 		font-size: 20px;
 		display: block;
-		margin: 150px auto;
+		margin: 100px auto;
 		cursor: pointer;
+	}
+	select{
+		width: 150px;
+		height: 50px;
+		border-radius: 10px;
+		border: 0;
+		padding: 0 44px;
+		box-sizing: border-box;
+	/* 	line-height: 50px;
+		text-align: center; */
+		background:darkblue; 
+		margin-left: 220px;
+		font-size: 20px;
+		color: skyblue;
 	}
 </style>
 <body>
@@ -70,6 +84,13 @@
 		<div id="jiemian">
 			<button class="start">开始游戏</button>
 			<button class="end">结束游戏</button>
+			<select name="" id="">
+				<option value="">慢速</option>
+				<option value="">中速</option>
+
+				<option value="">快速</option>
+
+			</select>
 		</div>
 	</div>
 </body>
@@ -80,6 +101,7 @@
 	var start=document.getElementsByClassName("start")[0];
 	var end=document.getElementsByClassName("end")[0];
 	var jiemian=document.getElementById("jiemian");
+	var option=document.getElementsByTagName("option");
 	var t;
 	var fx="right";
 	var fen=0;
@@ -97,7 +119,11 @@
 			sence.appendChild(gezi);
 		}
 	}
-
+	for(var i=0;i<option.length-1){
+		option[i].onclick=function(){
+			
+		}
+	}
 	var she=[{x:0,y:0},{x:0,y:1},{x:0,y:2}]
 	drawShe(she);
 	var sw=fangfood();
