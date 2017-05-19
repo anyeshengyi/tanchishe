@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>贪吃蛇</title>
+</head>
+<style>
+	#sence{
+		width: 600px;
+		height: 600px;
+		border: 1px solid black;
+		/* background: #000; */
+		/* position: absolute;
+		top: 0;left: 0;bottom: 0;right: 0; */
+		margin:0 auto;
+		position: relative;
+	}
+	.gezi{
+		width: 30px;
+		height: 30px;
+		/* margin-right: 1px;
+		margin-bottom: 1px; */
+		background: #fff;
+		float: left;
+	}
+	.she{
+		
+		background: url('img/snackbody.png') no-repeat center center;
+		background-size: 32px;
+	}
+	.shetou{
+		background: url('img/snackhead .png') no-repeat center center;
+		background-size: 34px;
+	}
+	.shewei{
+		background: url('img/snackfoot.png') no-repeat center center;
+		background-size: 32px;
+	}
+	.shiwu{
+
+		background: url('img/shiwu.jpg') no-repeat center center;
+		background-size: 29px;
+	}
+	#jiemian{
+		width: 100%;
+		height: 100%;
+		background: url('img/beijing.jpg') no-repeat;
+		background-size: 100%;
+		opacity: 1;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 99999;
+	}
+	button{
+		width: 150px;
+		height: 50px;
+		border-radius: 10px;
+		color: skyblue;
+		background: darkblue;
+		font-weight: 600;
+		font-size: 20px;
+		display: block;
+		margin: 150px auto;
+		cursor: pointer;
+	}
+</style>
+<body>
+	<div id="sence">
+		<div id="jiemian">
+			<button class="start">开始游戏</button>
+			<button class="end">结束游戏</button>
+		</div>
+	</div>
+</body>
+</html>
+<script>
+
+	var sence=document.getElementById("sence");
+	var start=document.getElementsByClassName("start")[0];
+	var end=document.getElementsByClassName("end")[0];
+	var jiemian=document.getElementById("jiemian");
+	var t;
+	var fx="right";
+	var fen=0;
+	var flag=true;
+	var num=0;
+	var speed=200;	
+	var speedm=speed;
+	
+	
+	for(var i=0;i<20;i++){
+		for(var j=0;j<20;j++){
+			var gezi=document.createElement('div');
+			gezi.classList.add('gezi');
+			gezi.id=i+"-"+j;
+			sence.appendChild(gezi);
+		}
+	}
+
+	var she=[{x:0,y:0},{x:0,y:1},{x:0,y:2}]
+	drawShe(she);
+	var sw=fangfood();
+	// move();
+	start.onclick=function(){
+		move();
+		jiemian.style.display="none"
+	}
+	end.onclick=function(){
+		window.close();
+	}
+	function drawShe(she){
+		for(var i in she){
+			let id=she[i].x+"-"+she[i].y;
+			document.getElementById(id).classList.add("she");
+			document.getElementById(id).classList.remove("shetou");
+			document.getElementById(id).classList.remove("shewei");
+
+		}
+		// console.log(she.length)
+		var touid=she[she.length-1].x+"-"+she[she.length-1].y;
+		var weiid=she[0].x+"-"+she[0].y;
+
+		document.getElementById(touid).classList.add("shetou");
+		document.getElementById(weiid).classList.add("shewei");
+
+		 var shetou1=document.querySelector(".shetou");
+		 if(fx=="right"){
+		 	shetou1.style.transform="rotate(0deg)"
+		 }
+		 if(fx=="left"){
+		 	shetou1.style.transform="rotate(180deg)"
+		 }
+		 if(fx=="up"){
+		 	shetou1.style.transform="rotate(-90deg)"
+		 }
+		 if(fx=="down"){
+		 	shetou1.style.transform="rotate(90deg)"
+		 }
+		
+	}
+	function fangfood(){
+		
+
+		do{
+			var fx=Math.floor(Math.random()*20);
+			var fy=Math.floor(Math.random()*20);
+		}while(check(she,fx,fy))
+		
+
+		var fid=fx+"-"+fy;
+		document.getElementById(fid).classList.add("shiwu");
+		return {x:fx,y:fy}
+	}
+	function check(she,fx,fy){
+		for(var i in she){
+			if(she[i].x==fx&&she[i].y==fy){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	function move(){
+		// var oldtou=she[she.length-1].x+"-"+she[she.length-1].y;
+		t=setInterval(move1,speedm)
+	}
+	function move1(){
+		
+			//获取新头坐标
+			if(fx=="right"){
+				var newtouX=she[she.length-1].x;
+				var newtouY=she[she.length-1].y+1;
+		
+
+				
+			}
+			if(fx=="left"){
+				var newtouX=she[she.length-1].x;
+				var newtouY=she[she.length-1].y-1;
+				
+				
+			}
+			if(fx=="up"){
+				var newtouX=she[she.length-1].x-1;
+				var newtouY=she[she.length-1].y;
+				
+
+			}
+			if(fx=="down"){
+				var newtouX=she[she.length-1].x+1;
+				var newtouY=she[she.length-1].y;
+				
+
+			}
+
+			if(newtouX==-1||newtouX==20||newtouY==-1||newtouY==20){
+				gameover();
+			}
+			for(var i in she){
+				if(newtouX==she[i].x&&newtouY==she[i].y){
+					gameover();
+				}
+			}
+
+
+			if(newtouX==sw.x&&newtouY==sw.y){
+				document.getElementById(sw.x+"-"+sw.y).classList.remove("shiwu");
+				sw=fangfood();
+				fen++;
+			}else{
+				var weiba=she.shift();
+				document.getElementById(weiba.x+"-"+weiba.y).classList.remove("she");
+				document.getElementById(weiba.x+"-"+weiba.y).classList.remove("shewei");
+
+			}
+			
+			//页面中走一步
+			// var newtou=newtouX+"-"+newtouY;
+			// document.getElementById(newtou).classList.add("she");
+			
+
+			//数组中走一步
+			var newtouZB={x:newtouX,y:newtouY};
+			
+			she.push(newtouZB);
+			drawShe(she);
+			flag=true;
+		}
+
+	document.onkeydown=function(e){
+		// var shetou1=document.querySelector(".shetou");
+		if(flag){
+			switch(e.keyCode){
+				case 37:
+					if(fx!="right"){
+						fx="left";
+						flag=false;
+						// shetou1.style.transform="rotate(180deg)"
+					}			
+				break;
+				case 38:
+					if(fx!="down"){
+						fx="up";
+						flag=false;
+						// shetou1.style.transform="rotate(90deg)"
+
+					}
+					
+				break;
+				case 39:
+					if(fx!="left"){
+						fx="right";
+						flag=false;
+						// shetou1.style.transform="rotate(0deg)"
+
+					}
+				break;
+				case 40:
+					if(fx!="up"){
+						fx="down";
+						flag=false;
+						// shetou1.style.transform="rotate(-90deg)"
+
+					}
+				break;
+			}
+		}
+		
+		// if(flag){    //加速
+		// 	flag=false;
+		// 	move1();
+		// }
+
+		if(e.keyCode==27){
+			
+			if(num==0){
+				clearInterval(t);
+				num=1;
+				jiemian.style.display="block";
+			}
+			else{
+				t=setInterval(move1,speedm);
+				num=0;
+				jiemian.style.display="none";
+
+			}
+		}
+		// console.log(e.keyCode);
+		
+	}
+	function gameover(){
+		clearInterval(t);
+		var flag=confirm("重新开始,得分"+fen+"");
+		if(flag){
+			location.reload();
+		}
+
+	}
+
+
+
+
+</script>
